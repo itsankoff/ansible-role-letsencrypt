@@ -1,0 +1,5 @@
+#!/bin/bash
+
+service {{ http_service }} stop
+letsencrypt renew
+service {{ http_service }} start
