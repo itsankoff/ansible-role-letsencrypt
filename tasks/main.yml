@@ -11,17 +11,21 @@
 
 - name: Install live certificate
   shell: >
-    certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }}
-      -m {{ letsencrypt_email }} --agree-tos
+    certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }} -m {{ letsencrypt_email }} --agree-tos
   become: yes
   when: letsencrypt_production
 
 - name: Install test certificate
   shell: >
-    certbot certonly -n --staging --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }}
-    -m {{ letsencrypt_email }} --agree-tos
+    certbot certonly -n --staging --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }} -m {{ letsencrypt_email }} --agree-tos
   become: yes
   when: not letsencrypt_production
+
+- name: Ensure renewal cron destination exists
+  file:
+    path: "{{ letsencrypt_renewal_cron_dest }}"
+    state: directory
+    owner: "{{ ansible_user }}"
 
 - name: Copy renewal cron
   template:
