@@ -1,2 +1,34 @@
 ---
-# tasks file for letsencrypt
+- name: Add letsencrypt repo
+  apt_repository:
+    repo: 'ppa:certbot/certbot'
+
+- name: Install letsencrypt
+  apt:
+    name: certbot
+    state: present
+    update_cache: yes
+
+- name: Install live certificate
+  shell: >
+    certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }}
+      -m {{ letsencrypt_email }} --agree-tos
+  become: yes
+  when: letsencrypt_production
+
+- name: Install test certificate
+  shell: >
+    certbot certonly -n --staging --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }}
+    -m {{ letsencrypt_email }} --agree-tos
+  become: yes
+  when: not letsencrypt_production
+
+- name: Copy renewal cron
+  template:
+    src: "renewal_cron.j2"
+    dest: "{{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.sh"
+    mode: 0755
+
+- name: Install renewal cron
+  shell: >
+    (crontab -l 2>/dev/null; echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -

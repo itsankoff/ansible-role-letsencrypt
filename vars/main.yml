@@ -1,2 +1,3 @@
 ---
 # vars file for letsencrypt
+letsencrypt_cron_filename: "renewal_cron"
