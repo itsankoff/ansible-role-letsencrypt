@@ -49,7 +49,7 @@ Example Playbook
 License
 -------
 
-BSD
+[MIT](https://github.com/itsankoff/ansible-role-letsencrypt/blob/master/LICENSE)
 
 
 Author Information
