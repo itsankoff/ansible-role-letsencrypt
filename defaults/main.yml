@@ -1,2 +1,3 @@
 ---
 letsencrypt_mode: "webroot"
+letsencrypt_production: yes
