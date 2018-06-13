@@ -1,2 +1,4 @@
 #!/bin/bash
+
 letsencrypt renew
+service "{{ letsencrypt_http_service }}" reload
