@@ -1,3 +1,5 @@
 ---
 letsencrypt_mode: "webroot"
 letsencrypt_production: yes
+letsencrypt_http_service: "nginx"
+letsencrypt_webroot_dir: "/var/www"
