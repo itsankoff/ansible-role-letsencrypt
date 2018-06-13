@@ -9,6 +9,12 @@
     state: present
     update_cache: yes
 
+- name: Stop http service to issue certificate in standalone mode
+  service:
+    name: "{{ letsencrypt_http_service }}"
+    state: stopped
+  when: letsencrypt_mode == "stanalone"
+
 - name: Install live certificate
   shell: >
     certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }}
@@ -32,3 +38,8 @@
 - name: Install renewal cron
   shell: >
     (crontab -l 2>/dev/null; echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
+
+- name: Reload http service to obtain the new certificates
+  service:
+    name: "{{ letsencrypt_http_service }}"
+    state: reloaded
