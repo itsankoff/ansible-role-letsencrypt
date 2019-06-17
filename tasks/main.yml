@@ -17,13 +17,15 @@
 
 - name: Install live certificate
   shell: >
-    certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }} -m {{ letsencrypt_email }} --agree-tos
+    certbot certonly -n --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ item }} -m {{ letsencrypt_email }} --agree-tos
+  with_items: "{{ letsencrypt_domains }}"
   become: yes
   when: letsencrypt_production
 
 - name: Install test certificate
   shell: >
-    certbot certonly -n --staging --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ letsencrypt_domain }} -m {{ letsencrypt_email }} --agree-tos
+    certbot certonly -n --staging --{{ letsencrypt_mode }} -w {{ letsencrypt_webroot_dir }} -d {{ item }} -m {{ letsencrypt_email }} --agree-tos
+  with_items: "{{ letsencrypt_domains }}"
   become: yes
   when: not letsencrypt_production
 
