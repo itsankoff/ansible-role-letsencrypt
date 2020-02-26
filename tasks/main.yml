@@ -43,7 +43,9 @@
 
 - name: Install renewal cron
   shell: >
-    (grep '{{ letsencrypt_cron_filename }}' /var/spool/cron/crontabs/* || echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
+      (grep '{{ letsencrypt_cron_filename }}' /var/spool/cron/crontabs/* ||
+      echo "0 5 * * * {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.sh >>
+        {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
 
 - name: Start http service in standalone mode
   service:
