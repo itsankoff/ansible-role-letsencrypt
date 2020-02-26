@@ -45,7 +45,14 @@
   shell: >
     (grep '{{ letsencrypt_cron_filename }}' /var/spool/cron/crontabs/* || echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
 
+- name: Start http service in standalone mode
+  service:
+    name: "{{ letsencrypt_http_service }}"
+    state: restarted
+  when: letsencrypt_mode == "stanalone"
+
 - name: Reload http service to obtain the new certificates
   service:
     name: "{{ letsencrypt_http_service }}"
     state: reloaded
+  when: letsencrypt_mode == "webroot"
