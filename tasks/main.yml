@@ -43,7 +43,7 @@
 
 - name: Install renewal cron
   shell: >
-    (crontab -l 2>/dev/null; echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
+    (grep '{{ letsencrypt_cron_filename }}' /var/spool/cron/crontabs/* || echo "0 5 * * * {{ letsencrypt_renewal_cron_dest}}/{{ letsencrypt_cron_filename }}.sh >> {{ letsencrypt_renewal_cron_dest }}/{{ letsencrypt_cron_filename }}.log") | crontab -
 
 - name: Reload http service to obtain the new certificates
   service:
