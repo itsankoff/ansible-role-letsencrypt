@@ -2,7 +2,7 @@ ansible-role-letsencrypt
 =========
 
 Easy to use letsencrypt ansible role to create and renew SSL certificates.
-Current version is tested and works on __Ubuntu 16.04__.
+Current version is tested and works on __Ubuntu 16.04, 18.04, 20.04__.
 In future more platforms will be added.
 
 Requirements
