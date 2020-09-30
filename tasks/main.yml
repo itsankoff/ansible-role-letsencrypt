@@ -1,13 +1,15 @@
 ---
-- name: Add letsencrypt repo
-  apt_repository:
-    repo: 'ppa:certbot/certbot'
-
 - name: Install letsencrypt
-  apt:
+  snap:
     name: certbot
     state: present
-    update_cache: yes
+    classic: yes
+
+- name: Make a certbot symlink in /usr/bin
+  file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
 
 - name: Stop http service to issue certificate in standalone mode
   service:
